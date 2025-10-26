@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface ReportModalProps {
@@ -24,13 +24,7 @@ export default function ReportModal({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (isOpen && !pdfUrl) {
-      generateReport();
-    }
-  }, [isOpen, orgId, reportType]);
-
-  const generateReport = async () => {
+  const generateReport = useCallback(async () => {
     setLoading(true);
     setError(null);
 
@@ -65,7 +59,13 @@ export default function ReportModal({
     } finally {
       setLoading(false);
     }
-  };
+  }, [orgId, reportType, year]);
+
+  useEffect(() => {
+    if (isOpen && !pdfUrl) {
+      generateReport();
+    }
+  }, [isOpen, pdfUrl, generateReport]);
 
   const handleDownload = () => {
     if (pdfUrl) {

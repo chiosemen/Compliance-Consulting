@@ -1,5 +1,4 @@
 import PDFDocument from 'pdfkit';
-import { Readable } from 'stream';
 
 interface OrganizationInfo {
   name: string;
@@ -71,7 +70,6 @@ export async function generatePDFReport(reportData: ReportData): Promise<Buffer>
       // Colors
       const primaryColor = '#1e40af'; // blue-800
       const secondaryColor = '#64748b'; // slate-500
-      const accentColor = '#0ea5e9'; // sky-500
       const dangerColor = '#dc2626'; // red-600
       const warningColor = '#f59e0b'; // amber-500
       const successColor = '#16a34a'; // green-600

@@ -139,7 +139,7 @@ export async function POST(request: NextRequest) {
         const filePath = `${org_id}/${fileName}`;
 
         // Upload to Supabase Storage
-        const { data: uploadData, error: uploadError } = await supabase.storage
+        const { error: uploadError } = await supabase.storage
           .from('reports')
           .upload(filePath, pdfBuffer, {
             contentType: 'application/pdf',

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import ReportModal from '@/components/ReportModal';
 import { useParams } from 'next/navigation';
 
@@ -39,11 +39,7 @@ export default function OrgPage() {
     'compliance_analysis' | 'risk_assessment' | 'donor_analysis'
   >('compliance_analysis');
 
-  useEffect(() => {
-    fetchOrganization();
-  }, [id]);
-
-  const fetchOrganization = async () => {
+  const fetchOrganization = useCallback(async () => {
     try {
       const response = await fetch(`/api/orgs/${id}`);
       const result = await response.json();
@@ -58,7 +54,11 @@ export default function OrgPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id]);
+
+  useEffect(() => {
+    fetchOrganization();
+  }, [fetchOrganization]);
 
   const handleGenerateReport = (
     type: 'compliance_analysis' | 'risk_assessment' | 'donor_analysis'

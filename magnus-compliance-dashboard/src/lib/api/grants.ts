@@ -80,7 +80,7 @@ export async function getGrantTotalsByYear(year: number) {
   if (error) throw error;
   if (!data) return { year, total: 0, count: 0 };
 
-  const total = data.reduce((sum, grant) => sum + Number((grant as any).amount), 0);
+  const total = data.reduce((sum, grant) => sum + Number(grant.amount), 0);
   return { year, total, count: data.length };
 }
 
@@ -103,13 +103,24 @@ export async function getTopRecipients(limit = 10, year?: number) {
   const { data, error } = await query;
 
   if (error) throw error;
+  if (!data) return [];
 
   // Aggregate by recipient
-  const aggregated = data.reduce((acc: any, grant: any) => {
+  interface AggregatedRecipient {
+    recipient: { id: string; name: string; ein: string | null };
+    total_amount: number;
+    grant_count: number;
+  }
+
+  const aggregated = data.reduce((acc: Record<string, AggregatedRecipient>, grant) => {
     const recipientId = grant.recipient_id;
+    // Supabase returns recipient as an object when using the join syntax
+    const recipient = grant.recipient as unknown as { id: string; name: string; ein: string | null } | null;
+
+    if (!recipientId || !recipient) return acc;
     if (!acc[recipientId]) {
       acc[recipientId] = {
-        recipient: grant.recipient,
+        recipient,
         total_amount: 0,
         grant_count: 0,
       };
@@ -120,7 +131,7 @@ export async function getTopRecipients(limit = 10, year?: number) {
   }, {});
 
   return Object.values(aggregated)
-    .sort((a: any, b: any) => b.total_amount - a.total_amount)
+    .sort((a, b) => b.total_amount - a.total_amount)
     .slice(0, limit);
 }
 
