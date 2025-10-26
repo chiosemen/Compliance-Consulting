@@ -1,0 +1,47 @@
+services:
+  # Backend API Service
+  - type: web
+    name: mcc-backend-api
+    env: node
+    region: oregon
+    plan: starter
+    buildCommand: npm install && npm run build
+    startCommand: npm run start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_ANON_KEY
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: PORT
+        value: 10000
+      - key: CORS_ORIGIN
+        sync: false
+    healthCheckPath: /health
+    autoDeploy: true
+
+  # Optional: Background Worker (if needed)
+  # - type: worker
+  #   name: mcc-worker
+  #   env: node
+  #   region: oregon
+  #   plan: starter
+  #   buildCommand: npm install && npm run build
+  #   startCommand: npm run worker
+  #   envVars:
+  #     - key: NODE_ENV
+  #       value: production
+  #     - key: SUPABASE_URL
+  #       sync: false
+  #     - key: SUPABASE_SERVICE_ROLE_KEY
+  #       sync: false
+
+databases:
+  # Note: Using Supabase for primary database
+  # This section is for Redis or other services if needed
+  # - name: mcc-redis
+  #   plan: starter
+  #   region: oregon
