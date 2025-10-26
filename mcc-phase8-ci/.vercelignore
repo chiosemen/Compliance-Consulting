@@ -1,0 +1,8 @@
+
+.github/
+.vscode/
+tests/
+cypress/
+*.md
+Dockerfile
+docker-compose.yml

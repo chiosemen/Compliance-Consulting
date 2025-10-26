@@ -1,0 +1,11 @@
+
+# Environment Variables
+
+Frontend (Next.js):
+- NEXT_PUBLIC_SUPABASE_URL
+- NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+GitHub Actions Secrets:
+- VERCEL_TOKEN
+- VERCEL_ORG_ID
+- VERCEL_PROJECT_ID

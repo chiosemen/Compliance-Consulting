@@ -1,0 +1,1 @@
+export default function OrgsPage(){return (<div className='container py-6'><h1 className='text-2xl font-semibold mb-4'>Organizations</h1><div className='card p-4'>Coming soon: searchable table of orgs.</div></div>)}

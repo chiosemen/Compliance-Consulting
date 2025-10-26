@@ -1,0 +1,1 @@
+export default function AdminPage(){return (<div className='container py-6'><h1 className='text-2xl font-semibold mb-4'>Admin</h1><div className='card p-4'>Users & Roles (RLS) — placeholder</div></div>)}

@@ -1,0 +1,1 @@
+type Props={params:{id:string}}; export default function OrgDetail({params}:any){return (<div className='container py-6'><h1 className='text-2xl font-semibold'>Org: {params.id}</h1><div className='grid md:grid-cols-2 gap-4 mt-4'><div className='card p-4'>Risk stats here.</div><div className='card p-4'>Donor flow visual here.</div></div></div>)}

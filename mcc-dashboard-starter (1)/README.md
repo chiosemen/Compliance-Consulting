@@ -1,0 +1,1 @@
+# MCC Dashboard Starter\nSee documentation in the project root.\n
