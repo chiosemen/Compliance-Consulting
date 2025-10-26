@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { mockOrganizations, mockGrants, mockRiskScores } from '@/lib/mock-data';
+import { generatePDFReport, ReportData } from '@/lib/pdf-generator';
+import { supabase } from '@/lib/supabase';
 
 /**
  * POST /api/report/generate
@@ -91,7 +93,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Build report data
-    const reportData = {
+    const reportData: ReportData = {
       id: `report-${Date.now()}`,
       org_id,
       organization: {
@@ -122,10 +124,66 @@ export async function POST(request: NextRequest) {
       recommendations: options?.include_recommendations !== false ? recommendations : null,
       data: {
         grants: orgGrants,
-        risk_score: orgRiskScore,
+        risk_score: orgRiskScore || null,
       },
     };
 
+    // Handle PDF generation and upload
+    if (options?.format === 'pdf') {
+      try {
+        // Generate PDF
+        const pdfBuffer = await generatePDFReport(reportData);
+
+        // Create filename
+        const fileName = `${reportData.id}_${organization.name.replace(/[^a-zA-Z0-9]/g, '_')}.pdf`;
+        const filePath = `${org_id}/${fileName}`;
+
+        // Upload to Supabase Storage
+        const { data: uploadData, error: uploadError } = await supabase.storage
+          .from('reports')
+          .upload(filePath, pdfBuffer, {
+            contentType: 'application/pdf',
+            cacheControl: '3600',
+            upsert: true,
+          });
+
+        if (uploadError) {
+          console.error('Error uploading PDF to Supabase:', uploadError);
+          throw new Error(`Failed to upload PDF: ${uploadError.message}`);
+        }
+
+        // Generate signed URL (valid for 1 hour)
+        const { data: signedUrlData } = await supabase.storage
+          .from('reports')
+          .createSignedUrl(filePath, 3600);
+
+        if (!signedUrlData?.signedUrl) {
+          throw new Error('Failed to generate signed URL');
+        }
+
+        return NextResponse.json({
+          success: true,
+          data: {
+            ...reportData,
+            pdf_url: signedUrlData.signedUrl,
+            file_path: filePath,
+          },
+          message: `Successfully generated PDF report for ${organization.name}`,
+        });
+      } catch (pdfError) {
+        console.error('Error generating/uploading PDF:', pdfError);
+        return NextResponse.json(
+          {
+            success: false,
+            error: 'Failed to generate PDF',
+            message: pdfError instanceof Error ? pdfError.message : 'Unknown PDF generation error',
+          },
+          { status: 500 }
+        );
+      }
+    }
+
+    // Return JSON format (default)
     return NextResponse.json({
       success: true,
       data: reportData,
