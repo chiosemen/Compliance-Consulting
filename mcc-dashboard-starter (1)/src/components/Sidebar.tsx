@@ -1,7 +1,7 @@
 
 "use client";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion } from "@/lib/lazy-motion";
 export default function Sidebar(){
   const items = [
     { href: "/", label: "Dashboard" },

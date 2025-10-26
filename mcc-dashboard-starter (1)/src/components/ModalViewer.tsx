@@ -1,6 +1,6 @@
 
 "use client";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "@/lib/lazy-motion";
 export default function ModalViewer({ open, onClose, children }:{ open:boolean; onClose:()=>void; children:React.ReactNode }){
   return (
     <AnimatePresence>
