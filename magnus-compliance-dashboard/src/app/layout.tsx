@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import Sidebar from "@/components/Sidebar";
+import Header from "@/components/Header";
 
 export const metadata: Metadata = {
   title: "Magnus Compliance Consulting",
@@ -14,7 +16,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="antialiased">
-        {children}
+        <Sidebar />
+        <Header />
+        <main className="ml-64 mt-16 min-h-screen bg-background">
+          {children}
+        </main>
       </body>
     </html>
   );
