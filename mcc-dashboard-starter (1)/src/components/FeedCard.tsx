@@ -1,6 +1,6 @@
 
 "use client";
-import { motion } from "framer-motion";
+import { motion } from "@/lib/lazy-motion";
 type Props = { org: { name:string; score:number; risk: "Low"|"Medium"|"High" } };
 export default function FeedCard({ org }: Props){
   return (
