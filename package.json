@@ -1,0 +1,32 @@
+{
+  "name": "compliance-consulting",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "test": "npx jest",
+    "test:watch": "npx jest --watch",
+    "lint:scripts": "bash -n scripts/*.sh",
+    "setup:env": "./scripts/setup-env.sh"
+  },
+  "dependencies": {
+    "next": "14.2.5",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "recharts": "^2.12.7",
+    "zod": "^4.1.12"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.1.4",
+    "@testing-library/react": "^14.0.0",
+    "@types/jest": "^29.5.8",
+    "@types/node": "24.9.1",
+    "@types/react": "19.2.2",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "ts-jest": "^29.1.1",
+    "typescript": "5.9.3"
+  }
+}
